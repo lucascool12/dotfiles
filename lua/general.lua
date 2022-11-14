@@ -29,3 +29,10 @@ augroup END
 -- exit with right click menu
 vim.cmd([[unmenu PopUp.How-to\ disable\ mouse]])
 vim.cmd([[amenu PopUp.Exit :q<CR>]])
+--" Find files using Telescope command-line sugar.
+vim.cmd([[
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+]])
