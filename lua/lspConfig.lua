@@ -106,30 +106,30 @@ local lsp_flags = {
 }
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require('lspconfig')['pyright'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities
 }
 require('lspconfig')['tsserver'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities
 }
 
 require('lspconfig')['turtle_ls'].setup{
-    -- cmd={'node', '/usr/local/bin/turtle-language-server', '--stdio'},
-    on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities
+  -- cmd={'node', '/usr/local/bin/turtle-language-server', '--stdio'},
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities
 }
 require('lspconfig')['rust_analyzer'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
-    capabilities = capabilities,
-    -- Server-specific settings...
-    settings = {
-      ["rust-analyzer"] = {}
-    }
+  on_attach = on_attach,
+  flags = lsp_flags,
+  capabilities = capabilities,
+  -- Server-specific settings...
+  settings = {
+    ["rust-analyzer"] = {}
+  }
 }
 require'lspconfig'.sumneko_lua.setup {
   capabilities = capabilities,
