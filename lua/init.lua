@@ -1,4 +1,11 @@
 require('plugins')
+-- auto packerCompile on saveing plugins.lua, doesnt work
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  augroup end
+]])
 vim.cmd([[set modelines=0]])
 -- nvim.tree:
     -- disable netrw at the very start of your init.lua (strongly advised)
@@ -15,14 +22,6 @@ require('general')
 require('colorScheme')
 -- status line
 require('feline').setup()
-
--- auto packerCompile on saveing plugins.lua, doesnt work
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
-]])
 
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
 require('lspConfig')

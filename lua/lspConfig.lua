@@ -158,13 +158,13 @@ require'lspconfig'.sumneko_lua.setup {
 -- cursor hover on error, faster updatetime
 vim.cmd([[set updatetime=1000]])
 vim.diagnostic.config({ virtual_text = false })
-vim.api.nvim_create_autocmd({ "CursorHold" }, {
-	callback = function()
-		if vim.lsp.buf.server_ready() then
-			vim.diagnostic.open_float()
-		end
-	end,
-})
+-- vim.api.nvim_create_autocmd({ "CursorHold" }, {
+-- 	callback = function()
+-- 		if vim.lsp.buf.server_ready() then
+-- 			vim.diagnostic.open_float()
+-- 		end
+-- 	end,
+-- })
 
 -- set up LSP signs
 for type, icon in pairs({
@@ -176,3 +176,6 @@ for type, icon in pairs({
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
+
+-- only enable lsp-lines on current line
+vim.diagnostic.config({ virtual_lines = { only_current_line = true } })

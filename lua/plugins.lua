@@ -8,12 +8,21 @@ return require('packer').startup(function(use)
   		}
 	}
 
-    use 'feline-nvim/feline.nvim'
-    use 'mfussenegger/nvim-lint'
+	use 'feline-nvim/feline.nvim'
+	use 'mfussenegger/nvim-lint'
 
 	use {
-        'numToStr/Comment.nvim'--,
-    	--config = function() require('Comment').setup() end
+  		'lewis6991/gitsigns.nvim',
+  		config = function()
+    			require('gitsigns').setup()
+  		end
+	}
+
+	use {
+        	'numToStr/Comment.nvim',
+    		config = function()
+                require('Comment').setup()
+            end
 	}
 
 	use {
@@ -57,6 +66,5 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/nvim-cmp'
     use "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-	end,
-	require('Comment').setup()
+	end
 )
