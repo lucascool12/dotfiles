@@ -66,5 +66,9 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/nvim-cmp'
     use "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
+    use({
+        "glepnir/lspsaga.nvim",
+        branch = "main",
+    })
 	end
 )

@@ -25,3 +25,7 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
 ]])
+
+-- exit with right click menu
+vim.cmd([[unmenu PopUp.How-to\ disable\ mouse]])
+vim.cmd([[amenu PopUp.Exit :q<CR>]])
