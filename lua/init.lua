@@ -18,7 +18,7 @@ vim.cmd([[set modelines=0]])
     require("nvim-tree").setup()
 
 require('general')
-require'key_maps'.init()
+require'keyMaps'.init()
 
 require('colorScheme')
 -- status line

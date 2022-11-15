@@ -1,3 +1,4 @@
+-- bootstrap Packer
 local ensure_packer = function()
   local fn = vim.fn
   local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
@@ -74,9 +75,6 @@ require('packer').startup(function(use)
         preview_window = false,
         title = true
       }
-            	-- Setup keymaps
-      vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
-      vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
     end
   }
   use 'hrsh7th/cmp-nvim-lsp'
