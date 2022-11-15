@@ -48,9 +48,6 @@ require('packer').startup(function(use)
 	}
 	use {
     "akinsho/toggleterm.nvim", tag = '*',
-    config = function()
-		  require("toggleterm").setup()
-   	end
   }
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
   use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP

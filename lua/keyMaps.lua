@@ -1,6 +1,10 @@
 local M = {}
 local keymap = vim.keymap.set
-M.init = function()
+
+-- ToggleTerm toggle terminal
+M.ttmap = [[<c-\>]]
+
+function M.init()
 	-- ToggleTerm
 	keymap("n", "<leader>tt", "<cmd>ToggleTerm<cr>")
 	-- ctrl+z and ctrl+y - undo redo, esc to exit terminal mode
@@ -25,7 +29,7 @@ M.init = function()
 	-- vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
 end
 
-M.lsp_attach = function ()
+function M.lsp_attach ()
 	-- lsp-saga
 	-- Lsp finder find the symbol definition implement reference
 	-- if there is no implement it will hide
@@ -45,7 +49,7 @@ M.lsp_attach = function ()
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
 end
 
-M.cmp = function()
+function M.cmp ()
 	local cmp = require'cmp'
 	return {
 		['<C-b>'] = cmp.mapping.scroll_docs(-4),

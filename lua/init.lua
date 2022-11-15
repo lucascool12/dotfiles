@@ -18,7 +18,12 @@ vim.cmd([[set modelines=0]])
     require("nvim-tree").setup()
 
 require('general')
-require'keyMaps'.init()
+local keyMaps = require'keyMaps'
+keyMaps.init()
+
+require("toggleterm").setup{
+	open_mapping = keyMaps.ttmap,
+}
 
 require('colorScheme')
 -- status line
