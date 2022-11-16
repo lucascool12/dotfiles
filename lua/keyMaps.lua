@@ -5,8 +5,8 @@ local keymap = vim.keymap.set
 M.ttmap = [[<c-\>]]
 
 function M.init()
-	-- ToggleTerm
-	keymap("n", "<leader>tt", "<cmd>ToggleTerm<cr>")
+	-- ToggleTree
+	keymap("n", "<leader>tt", "<cmd>NvimTreeToggle<cr>")
 	-- ctrl+z and ctrl+y - undo redo, esc to exit terminal mode
 	vim.cmd("tnoremap <Esc> <C-\\><C-n>")
 	vim.cmd([[
