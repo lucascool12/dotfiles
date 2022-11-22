@@ -27,7 +27,7 @@ require("toggleterm").setup{
 
 require('colorScheme')
 -- status line
-require('feline').setup()
+require'lualine'.setup()
 
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
 require('lspConfig')
