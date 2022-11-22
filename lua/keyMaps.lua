@@ -75,6 +75,8 @@ function M.init()
 			vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
 		end
 	})
+	vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>')
+	vim.keymap.set('n', '}', '<cmd>AerialNext<CR>')
 	keymap('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 end
 
