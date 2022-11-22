@@ -49,7 +49,6 @@ require('packer').startup(function(use)
 	use {
     "akinsho/toggleterm.nvim", tag = '*',
   }
-  use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
   use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
   use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
   use {
@@ -79,7 +78,6 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
-  use "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
   use({
     "glepnir/lspsaga.nvim",
     branch = "main",
@@ -89,7 +87,10 @@ require('packer').startup(function(use)
     -- or                            , branch = '0.1.x',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
-    	use 'BurntSushi/ripgrep'
+  use 'BurntSushi/ripgrep'
+	use {
+		"ray-x/lsp_signature.nvim",
+	}
 	end
 )
 

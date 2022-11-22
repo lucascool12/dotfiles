@@ -1,4 +1,3 @@
-require('lsp_lines').setup()
 local flake8l = require('lint').linters.flake8
 local dmypy = require('lint').linters.mypy
 require('lint').linters.flake8120 = flake8l
