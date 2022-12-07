@@ -6,10 +6,7 @@ local cmp = require'cmp'
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
         require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
       end,
     },
     window = {
@@ -18,14 +15,26 @@ local cmp = require'cmp'
     },
     mapping = cmp.mapping.preset.insert(keyMaps.cmp()),
     sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-    })
+      { name = 'nvim_lsp', priority = 8 },
+      { name = 'luasnip', priority = 7 }, -- For luasnip users.
+      { name = 'buffer', priority = 6 },
+    }),
+    sorting = {
+      priority_weight = 1.0,
+      comparators = {
+        -- cmp.score_offset, -- not good at all
+        cmp.locality,
+        cmp.recently_used,
+        cmp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+        cmp.offset,
+        cmp.order,
+        -- cmp.scopes, -- what?
+        -- cmp.sort_text,
+        -- cmp.exact,
+        -- cmp.kind,
+        -- cmp.length, -- useless 
+      },
+    },
   })
 
   -- Set configuration for specific filetype.
@@ -123,7 +132,7 @@ require'lspconfig'.sumneko_lua.setup {
 }
 
 -- cursor hover on error, faster updatetime
-vim.cmd([[set updatetime=500]])
+vim.cmd([[set updatetime=1000]])
 vim.diagnostic.config({ virtual_text = false })
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
 	callback = function()

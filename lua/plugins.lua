@@ -100,6 +100,7 @@ require('packer').startup(function(use)
 	use {
 		"ray-x/lsp_signature.nvim",
 	}
+  use 'Vimjas/vim-python-pep8-indent'
 	end
 )
 
