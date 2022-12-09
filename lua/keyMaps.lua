@@ -7,6 +7,9 @@ M.ttmap = [[<c-\>]]
 function M.init()
 	-- ToggleTree
 	keymap("n", "<leader>tt", "<cmd>NvimTreeToggle<cr>")
+  vim.cmd([[
+  nnoremap <leader>l <cmd>call setqflist([])<cr>
+  ]])
 	-- ctrl+z and ctrl+y - undo redo, esc to exit terminal mode
 	vim.cmd("tnoremap <Esc> <C-\\><C-n>")
 	vim.cmd([[
@@ -100,14 +103,4 @@ function M.lsp_attach ()
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
 end
 
-function M.cmp ()
-	local cmp = require'cmp'
-	return {
-		['<C-b>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.abort(),
-		['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-	}
-end
 return M

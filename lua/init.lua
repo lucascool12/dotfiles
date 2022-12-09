@@ -16,14 +16,10 @@ vim.cmd([[set modelines=0]])
 
     -- empty setup using defaults
     require("nvim-tree").setup()
-
 require('general')
 local keyMaps = require'keyMaps'
 keyMaps.init()
 
-require("toggleterm").setup{
-	open_mapping = keyMaps.ttmap,
-}
 
 require('colorScheme')
 -- status line
@@ -43,7 +39,17 @@ local lsp_sig_config = {
   end,
 }
 require "lsp_signature".setup(lsp_sig_config)
-
+require'toggleterm'.setup{
+  open_mapping = require'keyMaps'.ttmap
+}
+-- coq neovim
+vim.g.coq_settings = {
+  auto_start = 'shut-up',
+  ["keymap.pre_select"] = true,
+  ["display.pum.fast_close"] = false,
+}
+-- chad tree
+-- local vim.g.coq_settings = { ["auto_start"] = 'shut-up' }
 require'nvim-treesitter.configs'.setup {
   -- -- A list of parser names, or "all"
   -- ensure_installed = { "c", "lua", "python" },

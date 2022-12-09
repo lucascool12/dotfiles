@@ -1,75 +1,6 @@
 -- completion
 -----------------------
 local keyMaps = require'keyMaps'
-local cmp = require'cmp'
-  cmp.setup({
-    snippet = {
-      -- REQUIRED - you must specify a snippet engine
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-      end,
-    },
-    window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert(keyMaps.cmp()),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp', priority = 8 },
-      { name = 'luasnip', priority = 7 }, -- For luasnip users.
-      { name = 'buffer', priority = 6 },
-    }),
-    sorting = {
-      priority_weight = 1.0,
-      comparators = {
-        -- cmp.score_offset, -- not good at all
-        cmp.locality,
-        cmp.recently_used,
-        cmp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-        cmp.offset,
-        cmp.order,
-        -- cmp.scopes, -- what?
-        -- cmp.sort_text,
-        -- cmp.exact,
-        -- cmp.kind,
-        -- cmp.length, -- useless 
-      },
-    },
-  })
-
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
------------------------
--- Auto lint per save
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  callback = function()
-    require("lint").try_lint()
-  end,
-})
 
 local on_attach = keyMaps.lsp_attach
 local lsp_flags = {
@@ -77,29 +8,24 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require('lspconfig')['pyright'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
-  capabilities = capabilities
 }
 
 require('lspconfig')['tsserver'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
-  capabilities = capabilities
 }
 
 require('lspconfig')['turtle_ls'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
-  capabilities = capabilities
 }
 
 require('lspconfig')['rust_analyzer'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
-  capabilities = capabilities,
   -- Server-specific settings...
   settings = {
     ["rust-analyzer"] = {}
@@ -108,7 +34,6 @@ require('lspconfig')['rust_analyzer'].setup{
 
 require'lspconfig'.sumneko_lua.setup {
   on_attach = on_attach,
-  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
