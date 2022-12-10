@@ -47,6 +47,9 @@ require('packer').startup(function(use)
       require('Comment').setup()
     end
 	}
+  use {
+    "ray-x/lsp_signature.nvim",
+  }
 
 	use {
     'nvim-treesitter/nvim-treesitter',
@@ -60,28 +63,6 @@ require('packer').startup(function(use)
   }
   use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
   use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
-  use {
-    "lewis6991/hover.nvim",
-    config = function()
-      require("hover").setup {
-        init = function()
-          -- Require providers
-          require("hover.providers.lsp")
-          -- require('hover.providers.gh')
-          -- require('hover.providers.jira')
-          -- require('hover.providers.man')
-          -- require('hover.providers.dictionary')
-        end,
-        preview_opts = {
-          border = nil
-        },
-        -- Whether the contents of a currently open hover window should be moved
-        -- to a :h preview-window when pressing the hover keymap.
-        preview_window = false,
-        title = true
-      }
-    end
-  }
   use {
     'ms-jpq/coq_nvim',
     branch = 'coq',
@@ -104,9 +85,6 @@ require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
   use 'BurntSushi/ripgrep'
-	use {
-		"ray-x/lsp_signature.nvim",
-	}
   use 'Vimjas/vim-python-pep8-indent'
   use({
     "iamcco/markdown-preview.nvim",

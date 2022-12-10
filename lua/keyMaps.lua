@@ -28,8 +28,6 @@ function M.init()
 	]])
 
 	-- hover.nvim key maps
-	keymap("n", "K", require("hover").hover, {desc = "hover.nvim"})
-	-- vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
 	local map = vim.api.nvim_set_keymap
 	local opts = { noremap = true, silent = true }
 
@@ -83,14 +81,14 @@ function M.init()
 	keymap('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 end
 
-function M.lsp_attach ()
+function M.lsp_keymap_attach ()
 	-- lsp-saga
 	-- Lsp finder find the symbol definition implement reference
 	-- if there is no implement it will hide
 	-- when you use action in finder like open vsplit then you can
 	-- use <C-t> to jump back
 	keymap("n", "<C-f>", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
-
+  keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
 	-- Code action -- \ca
 	keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
 

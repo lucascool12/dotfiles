@@ -28,17 +28,6 @@ require'lualine'.setup()
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
 require('lspConfig')
 
-local lsp_sig_config = {
-  on_attach = function(client, bufnr)
-    require "lsp_signature".on_attach({
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
-      handler_opts = {
-        border = "rounded"
-      }
-    }, bufnr)
-  end,
-}
-require "lsp_signature".setup(lsp_sig_config)
 require'toggleterm'.setup{
   open_mapping = require'keyMaps'.ttmap
 }
@@ -48,8 +37,9 @@ vim.g.coq_settings = {
   ["keymap.pre_select"] = true,
   ["display.pum.fast_close"] = false,
 }
--- chad tree
--- local vim.g.coq_settings = { ["auto_start"] = 'shut-up' }
+
+
+
 require'nvim-treesitter.configs'.setup {
   -- -- A list of parser names, or "all"
   -- ensure_installed = { "c", "lua", "python" },

@@ -2,7 +2,10 @@
 -----------------------
 local keyMaps = require'keyMaps'
 
-local on_attach = keyMaps.lsp_attach
+local on_attach = function(_, bufnr)
+  keyMaps.lsp_keymap_attach()
+  -- require'lsp_signature'.on_attach(lsp_sig_config, bufnr)
+end
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
@@ -86,6 +89,18 @@ for type, icon in pairs({
 end
 
 -- lsp-saga
-local saga = require('lspsaga')
+-- local saga = require('lspsaga')
 
-saga.init_lsp_saga()
+-- saga.init_lsp_saga()
+local lsp_sig_config = {
+  on_attach = function(client, bufnr)
+    require "lsp_signature".on_attach({
+      bind = true, -- This is mandatory, otherwise border config won't get registered.
+      handler_opts = {
+        border = "rounded"
+      }
+    }, bufnr)
+  end,
+}
+
+require "lsp_signature".setup(lsp_sig_config)
