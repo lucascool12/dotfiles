@@ -108,6 +108,10 @@ require('packer').startup(function(use)
 		"ray-x/lsp_signature.nvim",
 	}
   use 'Vimjas/vim-python-pep8-indent'
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+  })
 	end
 )
 
