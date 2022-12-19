@@ -17,7 +17,6 @@ vim.opt.termguicolors = true
 -- vim.cmd([[set clipboard=unnamedplus]])
 
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
-require('lspConfig')
 
 -- coq neovim
 vim.g.coq_settings = {

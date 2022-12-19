@@ -1,11 +1,33 @@
--- completion
------------------------
-local keyMaps = require'keyMaps'
+require("mason").setup()
+require'mason-lspconfig'.setup()
+
+local keymap = vim.keymap.set
+
+function lsp_keymap_attach ()
+	-- lsp-saga
+	-- Lsp finder find the symbol definition implement reference
+	-- if there is no implement it will hide
+	-- when you use action in finder like open vsplit then you can
+	-- use <C-t> to jump back
+	keymap("n", "<C-f>", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
+  keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+	-- Code action -- \ca
+	keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
+
+	-- Peek Definition
+	-- you can edit the definition file in this flaotwindow
+	-- also support open/vsplit/etc operation check definition_action_keys
+	-- support tagstack C-t jump back
+	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+
+	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
+end
 
 local on_attach = function(_, bufnr)
-  keyMaps.lsp_keymap_attach()
+  lsp_keymap_attach()
   -- require'lsp_signature'.on_attach(lsp_sig_config, bufnr)
 end
+
 local lsp_flags = {
   -- This is the default in Nvim 0.7+
   debounce_text_changes = 150,
