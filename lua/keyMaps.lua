@@ -1,18 +1,6 @@
 local M = {}
 local keymap = vim.keymap.set
 
-
-function M.init()
-	-- ctrl+z and ctrl+y - undo redo, esc to exit terminal mode
-	vim.cmd("tnoremap <Esc> <C-\\><C-n>")
-	vim.cmd([[
-	nnoremap <C-Z> u
-	nnoremap <C-Y> <C-R>
-	inoremap <C-Z> <C-O>u
-	inoremap <C-Y> <C-O><C-R>
-	]])
-end
-
 function M.lsp_keymap_attach ()
 	-- lsp-saga
 	-- Lsp finder find the symbol definition implement reference
