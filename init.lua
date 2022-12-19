@@ -17,10 +17,3 @@ vim.opt.termguicolors = true
 -- vim.cmd([[set clipboard=unnamedplus]])
 
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
-
--- coq neovim
-vim.g.coq_settings = {
-  auto_start = 'shut-up',
-  ["keymap.pre_select"] = true,
-  ["display.pum.fast_close"] = false,
-}

@@ -3,7 +3,11 @@ require'mason-lspconfig'.setup()
 
 local keymap = vim.keymap.set
 
-function lsp_keymap_attach ()
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+local lsp_signature_config = {}
+
+function lsp_keymap_attach (client, bufnr)
 	-- lsp-saga
 	-- Lsp finder find the symbol definition implement reference
 	-- if there is no implement it will hide
@@ -21,10 +25,11 @@ function lsp_keymap_attach ()
 	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
+  require "lsp_signature".on_attach(lsp_signature_config, bufnr)  -- Note: add in lsp client on-attach
 end
 
-local on_attach = function(_, bufnr)
-  lsp_keymap_attach()
+local on_attach = function(client, bufnr)
+  lsp_keymap_attach(client, bufnr)
   -- require'lsp_signature'.on_attach(lsp_sig_config, bufnr)
 end
 
@@ -36,21 +41,25 @@ local lsp_flags = {
 require('lspconfig')['pyright'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
+  capabilities = capabilities,
 }
 
 require('lspconfig')['tsserver'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
+  capabilities = capabilities,
 }
 
 require('lspconfig')['turtle_ls'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
+  capabilities = capabilities,
 }
 
 require('lspconfig')['rust_analyzer'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
+  capabilities = capabilities,
   -- Server-specific settings...
   settings = {
     ["rust-analyzer"] = {}
@@ -59,6 +68,7 @@ require('lspconfig')['rust_analyzer'].setup{
 
 require'lspconfig'.sumneko_lua.setup {
   on_attach = on_attach,
+  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -111,18 +121,6 @@ for type, icon in pairs({
 end
 
 -- lsp-saga
--- local saga = require('lspsaga')
+local saga = require('lspsaga')
 
--- saga.init_lsp_saga()
-local lsp_sig_config = {
-  on_attach = function(client, bufnr)
-    require "lsp_signature".on_attach({
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
-      handler_opts = {
-        border = "rounded"
-      }
-    }, bufnr)
-  end,
-}
-
-require "lsp_signature".setup(lsp_sig_config)
+saga.init_lsp_saga()
