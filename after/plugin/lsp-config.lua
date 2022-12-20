@@ -38,17 +38,70 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-require('lspconfig')['pyright'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
+local function mason_ensure_installed(servers)
+  local mason_reg = require'mason-registry'
+  for _, server in ipairs(servers) do
+    if not mason_reg.is_installed(server) then
+      vim.cmd("MasonInstall " .. server)
+    end
+  end
+end
+
+local ensure_installed = {'lua-language-server', 'rust-analyzer', 'pyright'}
+mason_ensure_installed(ensure_installed)
+
+require("mason-lspconfig").setup_handlers {
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function (server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+    }
+  end,
+  -- Next, you can provide a dedicated handler for specific servers.
+  -- For example, a handler override for the `rust_analyzer`:
+  ["rust_analyzer"] = function ()
+    require('lspconfig')['rust_analyzer'].setup{
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      -- Server-specific settings...
+      settings = {
+        ["rust-analyzer"] = {}
+      }
+    }
+  end,
+  ["sumneko_lua"] = function()
+    require'lspconfig'.sumneko_lua.setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = {'vim'},
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            library = vim.api.nvim_get_runtime_file("", true),
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false,
+          },
+        },
+      },
+    }
+  end,
 }
 
-require('lspconfig')['tsserver'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
 
 require('lspconfig')['turtle_ls'].setup{
   on_attach = on_attach,
@@ -56,40 +109,6 @@ require('lspconfig')['turtle_ls'].setup{
   capabilities = capabilities,
 }
 
-require('lspconfig')['rust_analyzer'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-  -- Server-specific settings...
-  settings = {
-    ["rust-analyzer"] = {}
-  }
-}
-
-require'lspconfig'.sumneko_lua.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
 
 -- cursor hover on error, faster updatetime
 vim.cmd([[set updatetime=1000]])
