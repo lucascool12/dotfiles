@@ -78,6 +78,10 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+ZSH_AUTOSUGGEST_STRATEGY=(
+    history
+    completion
+)
 bindkey '^ ' autosuggest-accept
 # User configuration
 
