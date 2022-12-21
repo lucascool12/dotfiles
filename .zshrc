@@ -73,7 +73,6 @@ export ZSH="$HOME/.oh-my-zsh"
 plugins=(
     zsh-nvm
     rust
-    git
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
