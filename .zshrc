@@ -1,15 +1,18 @@
+# Download Znap, if it's not there yet.
+[[ -f ~/Git/zsh-snap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/Git/zsh-snap
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+source ~/Git/zsh-snap/znap.zsh  # Start Znap
 
-plugins=(
-    zsh-nvm
-    rust
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-)
+znap eval starship 'starship init zsh --print-full-init'
+znap prompt
 
-source $ZSH/oh-my-zsh.sh
+znap source marlonrichert/zsh-autocomplete
+znap source zsh-users/zsh-autosuggestions
+znap source zsh-users/zsh-syntax-highlighting
+znap source lukechilds/zsh-nvm
+
 ZSH_AUTOSUGGEST_STRATEGY=(
     history
     completion
