@@ -12,10 +12,12 @@ znap source marlonrichert/zsh-autocomplete
 znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-syntax-highlighting
 znap source lukechilds/zsh-nvm
+znap source se-jaeger/zsh-activate-py-environment
 
 ZSH_AUTOSUGGEST_STRATEGY=(
     history
     completion
 )
 bindkey '^ ' autosuggest-accept
-eval "$(starship init zsh)"
+
+bindkey -v
