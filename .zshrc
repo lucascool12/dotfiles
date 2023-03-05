@@ -26,3 +26,4 @@ ZSH_AUTOSUGGEST_STRATEGY=(
 )
 bindkey -r '^@'
 bindkey '^@' autosuggest-accept
+setopt HIST_IGNORE_DUPS
