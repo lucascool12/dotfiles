@@ -17,9 +17,11 @@ znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-syntax-highlighting
 znap source lukechilds/zsh-nvm
 znap source se-jaeger/zsh-activate-py-environment
+znap source Tarrasch/zsh-autoenv
 
 zstyle ':autocomplete:*' insert-unambiguous no
 
+AUTOENV_EDITOR=nvim
 ZSH_AUTOSUGGEST_STRATEGY=(
     history
     completion
