@@ -13,5 +13,6 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 if [[ $commands[exa] ]] then
     alias ls=exa
+    alias ll="exa -l"
 fi
 
