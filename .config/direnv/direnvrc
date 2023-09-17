@@ -1,0 +1,43 @@
+use_guix() {
+    GUIX_PACKAGES="$GUIX_PACKAGES $@"
+    GUIX_USED="yes"
+}
+
+guix_on_exit() {
+    if [[ ! -n $GUIX_USED ]]; then
+        return
+    fi
+    if [[ ! -n $GUIX_ROOTS ]]; then
+        GUIX_ROOTS=$PWD/.gcroots
+    fi
+    if [[ ! -n $GUIX_DIRENV_PROFILE ]]; then
+        GUIX_DIRENV_PROFILE=.guixprofile
+    fi
+    GUIX_DIRENV_PROFILE=$GUIX_ROOTS/$GUIX_DIRENV_PROFILE
+    if [[ ! -n $GUIX_PACKAGE_LIST ]]; then
+        GUIX_PACKAGE_LIST=package_list
+    fi
+    GUIX_PACKAGE_LIST=$GUIX_ROOTS/$GUIX_PACKAGE_LIST
+    if [[ ! -e $GUIX_ROOTS ]]; then
+        mkdir -p "$GUIX_ROOTS"
+    fi
+
+    if [[ -e $GUIX_DIRENV_PROFILE && `echo $GUIX_PACKAGES | diff "$GUIX_PACKAGE_LIST" -` = "" ]]; then
+        . "$GUIX_DIRENV_PROFILE/etc/profile"
+    else
+        if [[ -e $GUIX_DIRENV_PROFILE ]]; then
+            rm -rf "$GUIX_DIRENV_PROFILE"
+        fi
+        eval $(guix shell `echo $GUIX_PACKAGES | xargs` --search-paths -r "$GUIX_DIRENV_PROFILE")
+        echo $GUIX_PACKAGES > "$GUIX_PACKAGE_LIST"
+    fi
+}
+
+prev_on_exit=$(trap -p EXIT | awk -F "'" '{print $2}')
+
+on_exit() {
+    guix_on_exit
+    eval $prev_on_exit
+}
+
+trap on_exit EXIT
