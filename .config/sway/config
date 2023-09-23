@@ -22,7 +22,7 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu rofi
 
 ### Output configuration
 #
@@ -72,8 +72,11 @@ output * bg /gnu/store/qhjpq4ax9kfwbfr60ifb2wf94pf1b1gn-sway-1.8.1/share/backgro
     # Kill focused window
     bindsym $mod+Shift+q kill
 
-    # Start your launcher
-    bindsym $mod+d exec $menu
+    # Start your launcher: drun
+    bindsym $mod+d exec $menu -show drun
+
+    # Start your launcher: run
+    bindsym $mod+Shift+d exec $menu -show run
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
