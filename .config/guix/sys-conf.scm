@@ -5,6 +5,7 @@
 
 (use-modules (gnu) (gnu system nss) (guix utils)
   (gnu packages terminals)
+  (gnu packages gnome)
   (gnu packages wm)
   (gnu packages xdisorg)
   (gnu packages suckless)
@@ -72,6 +73,8 @@
                      gtk+
                      waybar
                      glinux:brightnessctl
+                     hicolor-icon-theme
+                     rofi
                      kitty)
                     %base-packages))
 
@@ -112,7 +115,7 @@
                 (append (list "https://substitutes.nonguix.org")
                   %default-substitute-urls))
                (authorized-keys
-                (append (list (local-file "./signing-key.pub"))
+                (append (list (local-file "./nonguix-signing-key.pub"))
                   %default-authorized-guix-keys))))
                 (delete gdm-service-type)
                 (delete login-service-type)
