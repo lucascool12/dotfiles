@@ -75,6 +75,8 @@
                      glinux:brightnessctl
                      hicolor-icon-theme
                      rofi
+                     swaylock
+                     swayidle
                      kitty)
                     %base-packages))
 
@@ -98,7 +100,12 @@
                                       (greetd-terminal-configuration (terminal-vt "3"))
                                       (greetd-terminal-configuration (terminal-vt "4"))
                                       (greetd-terminal-configuration (terminal-vt "5"))
-                                      (greetd-terminal-configuration (terminal-vt "6")))))))
+                                      (greetd-terminal-configuration (terminal-vt "6"))))))
+                              (service screen-locker-service-type
+                                       (screen-locker-configuration
+                                         (name "swaylock")
+                                         (program (file-append swaylock "/bin/swaylock"))
+                                         (using-setuid? #f))))
                           ;; (service enlightenment-desktop-service-type)
                           ;;     (service slim-service-type (slim-configuration
                           ;;                                  (xorg-configuration
@@ -119,7 +126,8 @@
                   %default-authorized-guix-keys))))
                 (delete gdm-service-type)
                 (delete login-service-type)
-                (delete mingetty-service-type)))
+                (delete mingetty-service-type)
+                (delete screen-locker-service-type)))
 
                 ;; FIXME: Since GDM depends on Rust (gdm -> gnome-shell -> gjs
                 ;; -> mozjs -> rust) and Rust is currently unavailable on
