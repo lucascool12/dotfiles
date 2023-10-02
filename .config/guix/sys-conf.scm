@@ -4,17 +4,57 @@
 ;; root partition is encrypted with LUKS, and a swap file.
 
 (use-modules (gnu) (gnu system nss) (guix utils)
+  (guix gexp)
   (gnu packages terminals)
   (gnu packages gnome)
   (gnu packages wm)
   (gnu packages xdisorg)
   (gnu packages suckless)
   (gnu packages gtk)
+  (gnu packages bash)
+  (gnu services)
+  (gnu home services)
+  ((gnu system keyboard) #:prefix k:)
+  (packages gtkgreet)
+  (services greetd)
   ((gnu packages linux) #:prefix glinux:)
   (nongnu packages linux)
   (nongnu system linux-initrd))
 (use-service-modules desktop sddm xorg lightdm)
 (use-package-modules certs gnome)
+
+(define* (gtkgreet-sway-config layouts #:optional (input "*"))
+  (mixed-text-file
+    "gtkgreet-sway-config"
+    "# `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.\n"
+    (sway-keyboard-layout layouts input)
+    "exec \"" gtkgreet-envs "/bin/gtkgreet -l; " sway "/bin/swaymsg exit\"\n"
+    "bindsym Mod4+BackSpace input \"" input "\" xkb_switch_layout next \n"
+    "bindsym Mod4+shift+e exec swaynag \\\n"
+    "	-t warning \\\n"
+    "	-m 'What do you want to do?' \\\n"
+    "	-b 'Poweroff' 'systemctl poweroff' \\\n"
+    "   -b 'Reboot' 'systemctl reboot'\n"
+    "bindsym --locked XF86MonBrightnessUp exec brightnessctl s 5%+\n"
+    "bindsym --locked XF86MonBrightnessDown exec brightnessctl s 5%-\n"
+    "include " sway "/etc/sway/config.d/*\n"))
+
+(define gtkgreet-environments
+  `(("greetd/environments/1-sway" ,(greetd-gtkgreet-tty-xdg-session-command
+                                   "run-sway"
+                                   (file-append sway "/bin/sway")))
+    ("greetd/environments/2-bash" ,(greetd-gtkgreet-tty-xdg-session-command
+                                   "bash-tty"
+                                   (file-append bash "/bin/bash")
+                                   '("-l")))))
+  ;; (mixed-text-file "gtkgreet-environments"
+  ;;             (greetd-gtkgreet-tty-xdg-session-command
+  ;;               "run-sway"
+  ;;               (file-append sway "/bin/sway")) "\n"
+  ;;             (greetd-gtkgreet-tty-xdg-session-command
+  ;;               "bash-tty"
+  ;;               (file-append bash "/bin/bash")
+  ;;               '("-l")) "\n"))
 
 (operating-system
   (host-name "skibidi")
@@ -26,7 +66,7 @@
 
   ;; Choose US English keyboard layout.  The "altgr-intl"
   ;; variant provides dead keys for accented characters.
-  (keyboard-layout (keyboard-layout "be"))
+  (keyboard-layout (k:keyboard-layout "be"))
 
   ;; Use the UEFI variant of GRUB with the EFI System
   ;; Partition mounted on /boot/efi.
@@ -49,7 +89,7 @@
   ;; Specify a swap file for the system, which resides on the
   ;; root file system.
   (swap-devices (list (swap-space
-                       (target (uuid "a9e23da2-399d-466e-9a28-704510b0d297")))))
+                       (target (uuid "8543e5ba-6d95-466f-9f59-a9cee4305be2")))))
 
   ;; Create user `bob' with `alice' as its initial password.
   (users (cons (user-account
@@ -67,7 +107,6 @@
                      nss-certs
                      ;; for user mounts
                      gvfs
-                     ulauncher
                      dmenu
                      sway
                      gtk+
@@ -80,82 +119,47 @@
                      kitty)
                     %base-packages))
 
-  ;; Add GNOME and Xfce---we can choose at the log-in screen
-  ;; by clicking the gear.  Use the "desktop" services, which
-  ;; include the X11 log-in service, networking with
-  ;; NetworkManager, and more.
-  (services (if (target-x86-64?)
-                (append (list (service greetd-service-type
-                                (greetd-configuration
-                                  (terminals
-                                    (list
-                                      (greetd-terminal-configuration
-                                        (terminal-vt "1")
-                                        (terminal-switch #t)
-                                        (default-session-command
-                                          (greetd-agreety-session
-                                            (command (file-append sway "/bin/sway"))
-                                            (command-args '()))))
-                                      (greetd-terminal-configuration (terminal-vt "2"))
-                                      (greetd-terminal-configuration (terminal-vt "3"))
-                                      (greetd-terminal-configuration (terminal-vt "4"))
-                                      (greetd-terminal-configuration (terminal-vt "5"))
-                                      (greetd-terminal-configuration (terminal-vt "6"))))))
-                              (service screen-locker-service-type
-                                       (screen-locker-configuration
-                                         (name "swaylock")
-                                         (program (file-append swaylock "/bin/swaylock"))
-                                         (using-setuid? #f))))
-                          ;; (service enlightenment-desktop-service-type)
-                          ;;     (service slim-service-type (slim-configuration
-                          ;;                                  (xorg-configuration
-                          ;;                                    (xorg-configuration
-                          ;;                                      (keyboard-layout keyboard-layout))))))
-                              ;; (set-xorg-configuration
-                              ;;  (xorg-configuration
-                              ;;   (keyboard-layout keyboard-layout))
-                              ;;   slim-service-type))
-                        (modify-services %desktop-services
-             (guix-service-type config => (guix-configuration
-               (inherit config)
-               (substitute-urls
-                (append (list "https://substitutes.nonguix.org")
-                  %default-substitute-urls))
-               (authorized-keys
-                (append (list (local-file "./nonguix-signing-key.pub"))
-                  %default-authorized-guix-keys))))
-                (delete gdm-service-type)
-                (delete login-service-type)
-                (delete mingetty-service-type)
-                (delete screen-locker-service-type)))
-
-                ;; FIXME: Since GDM depends on Rust (gdm -> gnome-shell -> gjs
-                ;; -> mozjs -> rust) and Rust is currently unavailable on
-                ;; non-x86_64 platforms, we use SDDM and Mate here instead of
-                ;; GNOME and GDM.
-                (append (list (service greetd-service-type))
-                          ;; (service enlightenment-desktop-service-type)
-                          ;;     (service slim-service-type (slim-configuration
-                          ;;                                  (xorg-configuration
-                          ;;                                    (xorg-configuration
-                          ;;                                      (keyboard-layout keyboard-layout))))))
-                              ;; (service slim-service-type)
-                              ;; (set-xorg-configuration
-                              ;;  (xorg-configuration
-                              ;;   (keyboard-layout keyboard-layout))
-                              ;;  slim-service-type))
-                        (modify-services %desktop-services
-             (guix-service-type config => (guix-configuration
-               (inherit config)
-               (substitute-urls
-                (append (list "https://substitutes.nonguix.org")
-                  %default-substitute-urls))
-               (authorized-keys
-                (append (list (local-file "./signing-key.pub"))
-                  %default-authorized-guix-keys))))
-                (delete gdm-service-type)
-                (delete login-service-type)
-                (delete mingetty-service-type)))))
+  (services
+    (append (list 
+              (service 
+                greetd-service-type
+                (greetd-configuration
+                  (terminals
+                    (list
+                      (greetd-terminal-configuration
+                        (terminal-vt "1")
+                        (terminal-switch #t)
+                        (default-session-command
+                          (greetd-gtkgreet-greeter
+                            (greet-command-args 
+                              `("-c" 
+                                ,(gtkgreet-sway-config
+                                   (list keyboard-layout (k:keyboard-layout "us" "intl"))))))))
+                      (greetd-terminal-configuration (terminal-vt "2"))
+                      (greetd-terminal-configuration (terminal-vt "3"))
+                      (greetd-terminal-configuration (terminal-vt "4"))
+                      (greetd-terminal-configuration (terminal-vt "5"))
+                      (greetd-terminal-configuration (terminal-vt "6"))))))
+              (service screen-locker-service-type
+                       (screen-locker-configuration
+                         (name "swaylock")
+                         (program (file-append swaylock "/bin/swaylock"))
+                         (using-setuid? #f)))
+              (simple-service 'gtkgreet-etc-service etc-service-type
+                              gtkgreet-environments))
+            (modify-services %desktop-services
+                             (guix-service-type config => (guix-configuration
+                                                            (inherit config)
+                                                            (substitute-urls
+                                                              (append (list "https://substitutes.nonguix.org")
+                                                                      %default-substitute-urls))
+                                                            (authorized-keys
+                                                              (append (list (local-file "./nonguix-signing-key.pub"))
+                                                                      %default-authorized-guix-keys))))
+                             (delete gdm-service-type)
+                             (delete login-service-type)
+                             (delete mingetty-service-type)
+                             (delete screen-locker-service-type))))
 
   ;; Allow resolution of '.local' host names with mDNS.
   (name-service-switch %mdns-host-lookup-nss))
