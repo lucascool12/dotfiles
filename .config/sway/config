@@ -1,13 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
-input "type:keyboard" {
-    xkb_layout be
-}
-
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -27,7 +17,7 @@ set $menu rofi
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /gnu/store/qhjpq4ax9kfwbfr60ifb2wf94pf1b1gn-sway-1.8.1/share/backgrounds/sway/)
-output * bg /gnu/store/qhjpq4ax9kfwbfr60ifb2wf94pf1b1gn-sway-1.8.1/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg $HOME/.config/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # Example configuration:
 #
@@ -40,6 +30,7 @@ output * bg /gnu/store/qhjpq4ax9kfwbfr60ifb2wf94pf1b1gn-sway-1.8.1/share/backgro
 # Example configuration:
 #
 exec swayidle -w \
+         timeout 100 'swaymsg set \$prev_brightness `brightnessctl g`; brightnessctl s 1%' resume 'swaymsg exec brightnessctl s \$prev_brightness' \
          timeout 300 'swaylock -f -c 000000' \
          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -f -c 000000'
@@ -228,5 +219,8 @@ font pango:DejaVuSansMNerdFont Normal 11
 # brightness
 bindsym --locked XF86MonBrightnessUp exec brightnessctl s 5%+
 bindsym --locked XF86MonBrightnessDown exec brightnessctl s 5%-
+bindsym XF86AudioRaiseVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ +1%'
+bindsym XF86AudioLowerVolume exec 'pactl set-sink-volume @DEFAULT_SINK@ -1%'
+bindsym XF86AudioMute exec 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
 
-include /gnu/store/qhjpq4ax9kfwbfr60ifb2wf94pf1b1gn-sway-1.8.1/etc/sway/config.d/*
+include "$(echo $HOSTNAME)/config"
