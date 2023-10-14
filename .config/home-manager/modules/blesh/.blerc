@@ -38,7 +38,7 @@ ble-face -s syntax_quoted             fg=15
 ble-face -s syntax_quotation          fg=11,bold
 ble-face -s syntax_escape             fg=3
 ble-face -s syntax_expr               fg=3
-ble-face -s syntax_error              fg=15,bg=1
+ble-face -s syntax_error              fg=1,underline
 ble-face -s syntax_varname            fg=5
 #ble-face -s syntax_delimiter          bold
 ble-face -s syntax_param_expansion    fg=5
@@ -86,3 +86,6 @@ ble-face -s filename_link             underline,fg=14
 #ble-face -s varname_unset             fg=124
 
 #ble-face -s cmdinfo_cd_cdpath         fg=26,bg=155
+
+# keymaps
+ble-bind -m 'auto_complete' -f 'C-SP' 'auto_complete/insert-on-end'
