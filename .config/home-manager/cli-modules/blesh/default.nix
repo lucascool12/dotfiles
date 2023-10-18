@@ -44,7 +44,7 @@ in
   home.packages = [ drv ];
 
   programs.bash.initExtra = "
-  . ${drv}/share/ble.sh
-  set -o vi";
+  . ${drv}/share/ble.sh";
+  # set -o vi";
   home.file.".blerc".source = ./.blerc;
 }
