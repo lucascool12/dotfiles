@@ -18,6 +18,9 @@
       enable = true;
       enableCompletion = true;
     };
+    neovim = {
+      defaultEditor = true;
+    };
   };
 
   programs.starship.enable = true;
