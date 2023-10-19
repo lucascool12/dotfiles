@@ -214,6 +214,13 @@ bar swaybar_command waybar
 #     }
 # }
 
+# screenshot
+bindsym $mod+shift+p exec grim -g "$(slurp -d)" - | wl-copy -t image/png
+
+# notifications
+bindsym ctrl+$mod+i exec makoctl invoke && makoctl dismiss
+bindsym ctrl+$mod+d exec makoctl dismiss
+
 font pango:DejaVuSansMNerdFont Normal 11
 
 # brightness

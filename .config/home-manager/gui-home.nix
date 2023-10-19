@@ -14,6 +14,8 @@
     thunderbird
     discord
     nerdfonts
+    grim
+    slurp
   ];
 
   gtk = {
