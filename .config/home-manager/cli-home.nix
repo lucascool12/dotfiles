@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstable-pkgs, ... }:
 {
   home.packages = with pkgs; [
     git
@@ -21,7 +21,16 @@
     neovim = {
       defaultEditor = true;
     };
+    tmux = {
+      enable = true;
+      escapeTime = 0;
+      mouse = true;
+    };
   };
+
+  programs.bash.initExtra = ''
+  export EDITOR="nvim"
+'';
 
   programs.starship.enable = true;
 
