@@ -26,7 +26,11 @@
       escapeTime = 0;
       mouse = true;
     };
+    ssh = {
+      enable = true;
+    };
   };
+  services.ssh-agent.enable = true;
 
   programs.bash.initExtra = ''
   export EDITOR="nvim"

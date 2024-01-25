@@ -19,7 +19,9 @@
     texlive.combined.scheme-tetex
     pandoc
     chromium
-    gnome.nautilus
+    cinnamon.nemo
+    libreoffice-fresh
+    lxqt.pavucontrol-qt
   ];
 
   gtk = {
@@ -28,6 +30,15 @@
       name = "Nordic";
       package = pkgs.nordic;
     };
+    iconTheme = {
+      name = "Tela";
+      package = pkgs.tela-icon-theme;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
   };
 
   # services.flatpak.enable = true;
