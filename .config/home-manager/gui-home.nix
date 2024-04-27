@@ -12,17 +12,24 @@
     git-credential-keepassxc
     thunderbird
     discord
-    nerdfonts
+    # nerdfonts
+    (pkgs.nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
     grim
     slurp
     zettlr
     texlive.combined.scheme-tetex
+    wezterm
     pandoc
     chromium
     cinnamon.nemo
     libreoffice-fresh
     lxqt.pavucontrol-qt
+    onagre
+    pop-launcher
+    element-desktop
   ];
+
+  home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
   gtk = {
     enable = true;
